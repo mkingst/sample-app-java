@@ -6,7 +6,7 @@ pipeline {
         maven 'Maven'
     }
     environment {
-        ECR_REPO_URL = '664574038682.dkr.ecr.eu-west-3.amazonaws.com'
+        ECR_REPO_URL = '122536884746.dkr.ecr.eu-west-1.amazonaws.com'
         IMAGE_REPO = "${ECR_REPO_URL}/java-maven-app"
     }
     stages {
@@ -58,19 +58,19 @@ pipeline {
                 }
             }
         }
-        stage('commit version update') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'gitlab-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'git config user.email "jenkins@example.com"'
-                        sh 'git config user.name "Jenkins"'
-                        sh "git remote set-url origin https://${USER}:${PASS}@gitlab.com/nanuchi/java-maven-app.git"
-                        sh 'git add .'
-                        sh 'git commit -m "ci: version bump"'
-                        sh 'git push origin HEAD:jenkins-jobs'
-                    }
-                }
-            }
-        }
+#        stage('commit version update') {
+#            steps {
+#                script {
+#                    withCredentials([usernamePassword(credentialsId: 'gitlab-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+#                        sh 'git config user.email "jenkins@example.com"'
+#                        sh 'git config user.name "Jenkins"'
+#                        sh "git remote set-url origin https://${USER}:${PASS}@gitlab.com/nanuchi/java-maven-app.git"
+#                        sh 'git add .'
+#                        sh 'git commit -m "ci: version bump"'
+#                        sh 'git push origin HEAD:jenkins-jobs'
+#                    }
+#                }
+#            }
+#        }
     }
 }
