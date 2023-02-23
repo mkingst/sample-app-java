@@ -59,19 +59,22 @@ pipeline {
                 }
             }
         }
-#        stage('commit version update') {
-#            steps {
-#                script {
-#                    withCredentials([usernamePassword(credentialsId: 'gitlab-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-#                        sh 'git config user.email "jenkins@example.com"'
-#                        sh 'git config user.name "Jenkins"'
-#                        sh "git remote set-url origin https://${USER}:${PASS}@gitlab.com/nanuchi/java-maven-app.git"
-#                        sh 'git add .'
-#                        sh 'git commit -m "ci: version bump"'
-#                        sh 'git push origin HEAD:jenkins-jobs'
-#                    }
-#                }
-#            }
-#        }
+ 
+/*
+        stage('commit version update') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'gitlab-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'git config user.email "jenkins@example.com"'
+                        sh 'git config user.name "Jenkins"'
+                        sh "git remote set-url origin https://${USER}:${PASS}@gitlab.com/nanuchi/java-maven-app.git"
+                        sh 'git add .'
+                        sh 'git commit -m "ci: version bump"'
+                        sh 'git push origin HEAD:jenkins-jobs'
+                    }
+                }
+            }
+        }
+*/
     }
 }
