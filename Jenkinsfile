@@ -6,8 +6,7 @@ pipeline {
         maven 'Maven'
     }
     environment {
-        ECR_REPO_URL = '664574038682.dkr.ecr.eu-west-3.amazonaws.com'
-        IMAGE_REPO = "${ECR_REPO_URL}/java-maven-app"
+        IMAGE_REPO = "mkingst14/java-maven-app"
     }
     stages {
         stage('increment version') {
@@ -36,41 +35,14 @@ pipeline {
             steps {
                 script {
                     echo "building the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'ecr-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                         sh "docker build -t ${IMAGE_REPO}:${IMAGE_NAME} ."
-                        sh "echo $PASS | docker login -u $USER --password-stdin ${ECR_REPO_URL}"
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
                         sh "docker push ${IMAGE_REPO}:${IMAGE_NAME}"
-                    }
-                }
-            }
-        }
-        stage('deploy') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
-                APP_NAME = 'java-maven-app'
-            }
-            steps {
-                script {
-                    echo 'deploying docker image...'
-                    sh 'envsubst < kubernetes/deployment.yaml | kubectl apply -f -'
-                    sh 'envsubst < kubernetes/service.yaml | kubectl apply -f -'
-                }
-            }
-        }
-        stage('commit version update') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'gitlab-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'git config user.email "jenkins@example.com"'
-                        sh 'git config user.name "Jenkins"'
-                        sh "git remote set-url origin https://${USER}:${PASS}@gitlab.com/nanuchi/java-maven-app.git"
-                        sh 'git add .'
-                        sh 'git commit -m "ci: version bump"'
-                        sh 'git push origin HEAD:jenkins-jobs'
                     }
                 }
             }
         }
     }
 }
+
