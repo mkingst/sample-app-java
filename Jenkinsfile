@@ -3,7 +3,7 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven'
+        maven 'maven-3.6'
     }
     environment {
         IMAGE_REPO = "mkingst14/java-maven-app"
